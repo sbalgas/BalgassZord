@@ -1,15 +1,20 @@
 from Motor.Servo import Servo
 from Utils.functions import map, constrain
 
+from time import time,sleep
+
 class Caterpillar(object):
 	
 	def __init__(self, connectMotors = False, stillLeft = 1500, stillRight = 1500):
 
-		self.WMin = 1050
-		self.WMax = 1950
+		self.LeftWMin = 1100
+		self.RightWMin = 1250
 
-		self.motorLeft	=  Servo('motorLeft',	19, self.WMin, self.WMax, False)
-		self.motorRight	=  Servo('motorRight',	20, self.WMin, self.WMax, False)
+		self.LeftWMax = 1850
+		self.RightWMax = 1950
+
+		self.motorLeft	=  Servo('motorLeft',	19, self.LeftWMin, self.LeftWMax, False)
+		self.motorRight	=  Servo('motorRight',	16, self.RightWMin, self.RightWMax, False)
 
 		self.stillLeft = stillLeft
 		self.stillRight = stillRight
@@ -42,6 +47,14 @@ class Caterpillar(object):
 		self.motorLeft.setW(self.stillLeft)
 		self.motorRight.setW(self.stillRight)
 
+	def getPWM(self, value, still, minOut, maxOut):
+
+		if value > 0:
+			return map(value, 0, 1, still, maxOut)
+		else:
+			return map(value, -1, 0, minOut, still)
+
+
 	def setDirection(self, axis):
 		Y = axis.get('LEFT_Y') ** 2
 		X = axis.get('LEFT_X') / 2
@@ -53,6 +66,8 @@ class Caterpillar(object):
 			self.stop()
 			return
 
-		self.motorLeft.setW( map(constrain(Y *-1 + X, -1, 1), -1, 1, self.WMin, self.WMax) )
-		self.motorRight.setW(map(constrain(Y + X    , -1, 1), -1, 1, self.WMin, self.WMax) )
-		
+		limitLeft = self.getPWM(constrain(Y *-1 + X, -1, 1), self.stillLeft, self.LeftWMin, self.LeftWMax)
+		limitRight = self.getPWM(constrain(Y + X    , -1, 1), self.stillRight, self.RightWMin, self.RightWMax)
+
+		self.motorLeft.setW( limitLeft)
+		self.motorRight.setW(limitRight)
