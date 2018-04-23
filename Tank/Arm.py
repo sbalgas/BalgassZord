@@ -1,18 +1,14 @@
-from Motor.Servo import Servo
-from Utils.functions import map, constrain
+from Motor.Bone import Bone
 
 class Arm(object):
 	
 	def __init__(self, connectMotors = False):
 
-		self.minPWM = 1050
-		self.maxPWM = 1950
-
-		self.maxAngle = 180
-		self.minAngle = 0
-
-		self.servo {
-			'FOOT' : Servo('servoFoot',	19, self.minPWM, self.maxPWM, False)
+		self.skeleton = {
+			'FOOT'	: Bone('FOOT',	4, 0, 180, 90, 1050, 1950, False),
+			'Y1'	: Bone('Y1',	17, 0, 180, 90, 1050, 1950, False),
+			'Y2'	: Bone('Y2',	27, 0, 180, 90, 1050, 1950, False),
+			'Y3'	: Bone('Y3',	27, 0, 180, 90, 1050, 1950, False)
 		}
 		
 		self.powered = False
@@ -27,8 +23,8 @@ class Arm(object):
 	def connectMotors(self):
 		print("Starting motors")
 
-		for oneServo in self.servo:
-			self.oneServo.start()
+		for bone in self.skeleton:
+			self.skeleton[bone].start()
 
 		self.powered = True
 
@@ -36,10 +32,22 @@ class Arm(object):
 		print("Disconnecting motors")
 
 		self.powered = False
-		or oneServo in self.servo:
-			self.oneServo.stop()
+		for bone in self.skeleton:
+			self.skeleton[bone].stop()
 
-	def setFootAngle(self, angle):
-		
-		self.servoFoot.setW(angleToPWM(angle, self.minAngle, self.maxAngle, self.minPWM, self.maxPWM))
-		
+	def setDirection(self, axis):
+		Y = axis.get('LEFT_Y')
+		X = axis.get('LEFT_X')
+
+		if (X > 0):
+			self.skeleton['FOOT'].incrementAngle()
+		elif (X < 0):
+			self.skeleton['FOOT'].decreaseAngle()
+
+		if (Y > 0):
+			self.skeleton['Y3'].incrementAngle()
+		elif (Y < 0):
+			self.skeleton['Y3'].decreaseAngle()
+
+arm = Arm(True)
+
