@@ -6,7 +6,7 @@ import imutils
 from collections import deque
 from time import time,sleep
 
-class OpenCV(object):
+class OpenCVColor(object):
 	
 	def __init__(self):
 		self.cap = cv2.VideoCapture(0)
