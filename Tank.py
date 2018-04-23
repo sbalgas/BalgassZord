@@ -1,5 +1,5 @@
 from Tank.Control.Joystick import Joystick
-from Tank.Control.OpenCV import OpenCV
+from Tank.Control.OpenCVClassifier import OpenCVClassifier
 from Tank.Caterpillar import Caterpillar
 
 from time import time,sleep
@@ -9,15 +9,15 @@ class Tank():
 	def __init__(self):
 		
 		self.cycling = True
-		self.cycletime = 0.01
+		self.cycletime = 0.2
 		
 		self.__setup()
 
 		self.__baton()
 
 	def __setup(self):
-		self.__control = OpenCV()
-		self.__caterpillar = Caterpillar(True, 1500, 1420)
+		self.__control = OpenCVClassifier()
+		self.__caterpillar = Caterpillar(True)
 
 
 	def __baton(self):
