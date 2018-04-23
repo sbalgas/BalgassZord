@@ -35,6 +35,12 @@ class Servo(object):
 			self.__IO.stop_servo(self.__pin)
 			self.powered = False
 
+	def getWMin(self):
+		return self.__WMin
+
+	def getWMax(self):
+		return self.__WMax
+
 	def increaseW(self, step=10):
 		self.setW(self.__W + int(step))
 
