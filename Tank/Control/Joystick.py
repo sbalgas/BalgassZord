@@ -62,3 +62,16 @@ class Joystick(object):
 			'LEFT_Y' : Y
 		}
 
+
+	def getAxisRight(self):
+		X = 0
+		Y = 0
+		if (len(self.JOYSTICKS)):
+			joystick = self.JOYSTICKS[-1]
+			X = round(joystick.get_axis(self.AXIS_IDS.get('RIGHT_X')), 3)
+			Y = round(joystick.get_axis(self.AXIS_IDS.get('RIGHT_Y')), 3)
+		
+		return {
+			'RIGHT_X' : X,
+			'RIGHT_Y' : Y
+		}
