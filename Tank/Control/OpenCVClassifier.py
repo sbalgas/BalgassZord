@@ -74,7 +74,7 @@ class OpenCVClassifier(object):
 			#cv2.imshow('image',frame)
 
 			#print time() - initial
-			cv2.waitKey(1)
+			cv2.waitKey(5)
 
 	
 	def isFrameBlurry(self, frame):
@@ -100,6 +100,11 @@ class OpenCVClassifier(object):
 	def getAxisLeft(self):
 		LEFT_X = 0
 		LEFT_Y = 0
+
+		return {
+			'LEFT_X' : LEFT_X,
+			'LEFT_Y' : LEFT_Y
+		}
 
 		if self.requireStop:
 			self.requireWait = True
@@ -144,3 +149,39 @@ class OpenCVClassifier(object):
 			'LEFT_Y' : LEFT_Y
 		}
 
+
+	def getAxisRight(self):
+		RIGHT_X = 0
+		RIGHT_Y = 0
+
+		if not self.ball:
+			print "BUSCANDO"
+			if (self.lastLocated == 180):
+				RIGHT_Y = 0
+				RIGHT_X = 0
+			else:
+				RIGHT_Y = 0
+				RIGHT_X = 0
+
+		else:
+			if (self.ball['position'][0]<=self.imageCenter[0] -50 or self.ball['position'][0]>=self.imageCenter[0] +50):
+				print "CENTRANDO"
+
+				if(self.ball['position'][0] < self.imageCenter[0]):
+					self.lastLocated = 180
+					RIGHT_X = -1
+
+				elif(self.ball['position'][0] > self.imageCenter[0]):
+					self.lastLocated = 0
+					RIGHT_X = 1
+
+			elif (self.ball['position'][1]<=self.imageCenter[1] -20 or self.ball['position'][1]>=self.imageCenter[1] +20):
+				if (self.ball['position'][1] < self.imageCenter[1]) :
+					RIGHT_Y = -1
+				elif (self.ball['position'][1] > self.imageCenter[1]):
+					RIGHT_Y = 1
+
+		return {
+			'RIGHT_X' : RIGHT_X,
+			'RIGHT_Y' : RIGHT_Y
+		}
