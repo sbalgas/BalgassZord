@@ -1,5 +1,5 @@
 from Servo import Servo
-from Utils.functions import angleToPWM
+from Tank.Utils.functions import angleToPWM
 
 class Bone(Servo):
 	"""docstring for Bone"""
@@ -9,7 +9,6 @@ class Bone(Servo):
 		self.angle = angle
 
 		Servo.__init__(self, name, pin, minPWM, maxPWM, simulation)
-
 
 	def setAngleLimit(self, minAngle, maxAngle):
 		self.minAngle = minAngle
@@ -23,11 +22,17 @@ class Bone(Servo):
 		self.setAngle(self.angle - angle)
 
 	def setAngle(self, angle):
+		if (angle < self.minAngle):
+			angle = self.minAngle
+		if (angle > self.maxAngle):
+			angle =  self.maxAngle
 
 		self.angle = angle;
-		self.setW(angleToPWM(self.angle, self.minAngle, self.maxAngle, self.getWMin(), self.getWMax()))
+		print self.name, self.angle
+		self.setW(angleToPWM(self.angle, 0, 180, self.getWMin(), self.getWMax()))
 
 	def start(self):
+		print "Starting ", self.name
 		super(Bone, self).start()
 		
 		self.setAngle(self.angle)
