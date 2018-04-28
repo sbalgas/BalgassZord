@@ -62,4 +62,11 @@ class Tank():
 		return
 
 
+
+print "BalgassZord  Copyright (C) 2017-2018 Leandro Galo Ortega"
+print "This program comes with ABSOLUTELY NO WARRANTY."
+print "This is free software, and you are welcome to redistribute it"
+
+sleep(5)
+
 Tank()
